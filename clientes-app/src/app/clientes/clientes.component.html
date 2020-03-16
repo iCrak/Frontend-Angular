@@ -1,0 +1,33 @@
+<div class="card border-primary mb-3" >
+    <div class="card-body text-primary">
+      <h5 class="card-title"> CLIENTES </h5>
+      <div class="form-group">
+        <button class="btn btn-rounded btn-primary" type="button" [routerLink]="['/clientes/form']">Agregar</button>
+      </div>
+      
+        <div class="table">
+            <table class="table table-bordered table-striped text-primary">
+                <thead>
+                    <tr>
+                        <th >ID</th>
+                        <th>NOMBRE</th>
+                        <th>APELLIDO</th>
+                        <th>EMAIL</th>
+                        <th>FECHA CREADA</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let cliente of clientes">
+                        <td>{{ cliente.id }}</td>
+                        <td>{{ cliente.nombre }}</td>
+                        <td>{{ cliente.apellido }}</td>
+                        <td>{{ cliente.email }}</td>
+                        <td>{{ cliente.creaAt }}</td>
+                        <td><button type="button" name="button" [routerLink]="['/clientes/form',cliente.id]" class="btn btn-primary">Editar</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+  </div>
