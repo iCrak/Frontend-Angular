@@ -3,6 +3,7 @@ import { Cliente } from './cliente';
 import { ClienteService } from './cliente.service';
 import { Router , ActivatedRoute} from '@angular/router';
 import swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-form',
@@ -10,9 +11,9 @@ import swal from 'sweetalert2';
   styleUrls: ['./form.component.css']
 })
 export class FormComponent implements OnInit {
-  titulo = 'Registrar Cliente';
 
   public cliente: Cliente = new Cliente();
+  public errores: string[];
 
   constructor(private clienteservice: ClienteService, private router: Router, private activatedRoute: ActivatedRoute) { }
 
@@ -20,22 +21,39 @@ export class FormComponent implements OnInit {
     this.cargarCliente();
   }
 
-  cargarCliente(): void{
+  cargarCliente(): void {
     this.activatedRoute.params.subscribe(params => {
-      let id = params['id']
-      if(id){
-        this.clienteservice.getCliente(id).subscribe( (cliente) => this.cliente = cliente)
+      // tslint:disable-next-line: no-string-literal
+      const id = params['id'];
+      if (id) {
+        this.clienteservice.getCliente(id).subscribe( (cliente) => this.cliente = cliente);
       }
-    })
+    });
   }
 
-  public create(): void {
-    this.clienteservice.create(this.cliente).subscribe(
-      response => {
+   create(): void {
+    this.clienteservice.create(this.cliente).
+    subscribe(json => {
       this.router.navigate(['/clientes']);
-      swal.fire('Nuevo Cliente', `Cliente ${this.cliente.nombre} creado con Exito`, 'success');
+      swal.fire('Nuevo Cliente', `${json.mensaje} : ${json.cliente.nombre}`, 'success');
+    },
+    err => {
+      this.errores = err.error.errors as string[];
+      console.log(err.error.errors);
     }
     );
+  }
+  update(): void {
+    this.clienteservice.update(this.cliente).subscribe(
+      cliente => {
+        this.router.navigate(['/clientes']);
+        swal.fire('Cliente Actualizado', `El Cliente ${cliente.nombre} ha sido creado con exito! `, 'success');
+      },
+      err => {
+        this.errores = err.error.errors as string[];
+        console.log(err.error.errors);
+      }
+  );
   }
 
 
