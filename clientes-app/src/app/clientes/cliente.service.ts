@@ -2,9 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { Cliente } from './cliente';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, tap} from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { formatDate, DatePipe } from '@angular/common';
+
 
 @Injectable()
 export class ClienteService {
@@ -14,7 +16,33 @@ export class ClienteService {
     constructor(private http: HttpClient, private router: Router) {}
 
         getClientes(): Observable<Cliente[]> {
-            return this.http.get<Cliente[]>(this.urlEndPoint);
+            return this.http.get(this.urlEndPoint).pipe(
+                tap(response => {
+                    const clientes = response as Cliente[];
+                    console.log('ClienteService : tap 1');
+                    clientes.forEach( cliente => {
+                            console.log(cliente.nombre);
+                    });
+                }),
+                map(response => {
+                   const cliente = response as Cliente[];
+                   // tslint:disable-next-line: no-shadowed-variable
+                   return cliente.map(cliente => {
+                       cliente.nombre = cliente.nombre.toUpperCase();
+                       /*const datePipe = new DatePipe('es');*/
+                       /*cliente.creaAt =  datePipe.transform(cliente.creaAt, 'EEEE dd, MMMM yyyy'); 'EEEE dd,MMMM yyyy */
+                       /*cliente.creaAt =  formatDate(cliente.creaAt, 'dd-MM-yyyy', 'en-US');*/
+                       return cliente;
+                   });
+                }
+                ),
+                tap(response => {
+                    console.log('ClienteService : tap 2');
+                    response.forEach( cliente => {
+                            console.log(cliente.nombre);
+                    });
+                })
+            );
         }
 
        create(cliente: Cliente): Observable<any> {
