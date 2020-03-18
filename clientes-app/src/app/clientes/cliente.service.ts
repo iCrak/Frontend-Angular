@@ -15,30 +15,28 @@ export class ClienteService {
     private httpHeaders = new HttpHeaders({'Content-Type': 'application/json'});
     constructor(private http: HttpClient, private router: Router) {}
 
-        getClientes(): Observable<Cliente[]> {
-            return this.http.get(this.urlEndPoint).pipe(
-                tap(response => {
-                    const clientes = response as Cliente[];
+        getClientes(page: number): Observable<any> {
+            return this.http.get(this.urlEndPoint + '/page/' + page).pipe(
+                tap((response: any) => {
                     console.log('ClienteService : tap 1');
-                    clientes.forEach( cliente => {
+                    (response.content as Cliente[]).forEach( cliente => {
                             console.log(cliente.nombre);
                     });
                 }),
-                map(response => {
-                   const cliente = response as Cliente[];
-                   // tslint:disable-next-line: no-shadowed-variable
-                   return cliente.map(cliente => {
+                map( (response: any) => {
+                    (response.content as Cliente[]).map(cliente => {
                        cliente.nombre = cliente.nombre.toUpperCase();
                        /*const datePipe = new DatePipe('es');*/
                        /*cliente.creaAt =  datePipe.transform(cliente.creaAt, 'EEEE dd, MMMM yyyy'); 'EEEE dd,MMMM yyyy */
                        /*cliente.creaAt =  formatDate(cliente.creaAt, 'dd-MM-yyyy', 'en-US');*/
                        return cliente;
                    });
+                    return response;
                 }
                 ),
                 tap(response => {
                     console.log('ClienteService : tap 2');
-                    response.forEach( cliente => {
+                    (response.content as Cliente[]).forEach( cliente => {
                             console.log(cliente.nombre);
                     });
                 })

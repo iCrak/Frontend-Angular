@@ -14,8 +14,7 @@
                         <th>APELLIDO</th>
                         <th>EMAIL</th>
                         <th>FECHA CREADA</th>
-                        <th></th>
-                        <th></th>
+                        <th colspan="2"></th>                        
                     </tr>
                 </thead>
                 <tbody>
@@ -35,6 +34,7 @@
                     </tr>
                 </tbody>
             </table>
+            <paginator-nav *ngIf="paginador" [paginador]="paginador" class="text-primary"></paginator-nav>
         </div>
     </div>
   </div>
