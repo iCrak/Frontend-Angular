@@ -43,6 +43,7 @@ export class DetalleComponent implements OnInit {
           } else if (event.type === HttpEventType.Response) {
             const response: any = event.body;
             this.cliente = response.cliente as Cliente;
+            this.modalService.notificarUpload.emit(this.cliente);
             swal.fire('La foto fue Subido Completamente!', response.mensaje , 'success');
           }
     });

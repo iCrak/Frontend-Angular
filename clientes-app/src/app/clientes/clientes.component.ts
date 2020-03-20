@@ -38,8 +38,18 @@ export class ClientesComponent implements OnInit {
          this.clientes = response.content as Cliente[];
          this.paginador = response;
         });
-    }
-    );
+    });
+
+    this.modalService.notificarUpload.subscribe( cliente => {
+      this.clientes = this.clientes.map(clienteOriginal => {
+        // tslint:disable-next-line: no-conditional-assignment
+        // tslint:disable-next-line: triple-equals
+        if ( cliente.id == clienteOriginal.id) {
+          clienteOriginal.foto = cliente.foto;
+        }
+        return clienteOriginal;
+      });
+    });
   }
   delete(cliente: Cliente): void {
     Swal.fire({
