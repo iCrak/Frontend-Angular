@@ -15,7 +15,8 @@
                         <li class="list-group-item active">{{ cliente.nombre }}</li>
                         <li class="list-group-item">{{ cliente.apellido }}</li>
                         <li class="list-group-item">{{ cliente.email }}</li>
-                        <li class="list-group-item">{{ cliente.creaAt | date:'EEEE dd,MMMM yyyy' }}</li>                      
+                        <li class="list-group-item">{{ cliente.creaAt | date:'EEEE dd,MMMM yyyy' }}</li>
+                        <li class="list-group-item">{{ cliente.region.nombre }}</li>                      
                     </ul>
                     <div class="input-group mb-3">
                         <div class="custom-file">
